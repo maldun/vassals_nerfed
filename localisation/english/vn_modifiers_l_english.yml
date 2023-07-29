@@ -1,0 +1,8 @@
+﻿### Replace Semi-Modern --> Super-Modern
+#####---------------------------------------------------------------------Mod by Sig "GreatExperiment" Altre
+
+l_english: 
+# FIX
+ ap_shared_destiny_effect:0 "Your §YSubjects§! $r_loyalty$ penalties from you having multiple subjects are Reduced."
+ civic_tooltip_franchising_effects:4 "Your §YSubjects§! gain an additional §G0.5§! $r_loyalty$ and do suffer smaller penalties from you having multiple Subjects.\n\nYour §YSubjects§! cannot have the following Agreement Terms:\n$t $TRIGGER_FAIL$§Y$subject_cannot_expand$§!.\n$t$$TRIGGER_FAIL$§Y$subject_can_not_do_diplomacy$§!.\n$t$$TRIGGER_FAIL$§Y$subject_does_not_get_sensors$§!.\n\nGrants access to the £building£ §Y$holding_franchise_headquarters$§! Holding \n"
+ civic_tooltip_feudal_realm_effects:6 "Your §YLeaders§! cost £unity£ Unity to be dismissed.\nYour §YGovernors§! do not have Unity Upkeep and generate £unity£ Unity equal to their level.\nYour §YSubjects§! gain an additional §G1§ $r_loyalty$ and suffer smaller penalties from you having multiple Subjects.\nYour §YSubjects§! cannot have the following Agreement Terms:\n$t$$TRIGGER_FAIL$§Y$subject_cannot_expand$§!.\n$t$$TRIGGER_FAIL$§YDo not join subject wars§! \n$t$$TRIGGER_FAIL$§Y$subject_can_not_do_diplomacy$§!.\n"
