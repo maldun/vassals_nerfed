@@ -39,11 +39,12 @@ refresh_subject_count_loyalty_penalty = {
 	       clear_variable = diff1
 	     }
 	}
-	erase_modifier = { MOD = empire_size_mods }
-	set_variable = { which = subjects_hlp = trigger:subjects }
+	erase_modifier = { MOD = vn_empire_size_mods }
+	set_variable = { which = subjects123 value = trigger:subjects }
+	multiply_variable = { which = subjects123 value = 0.25 }
 	add_modifier = {
-	              modifier = empire_size_mods
-	              multiplier = PREV.subjects_hlp
+	              modifier = vn_empire_size_mods
+	              multiplier = subjects123
 	           }
-	clear_variable = subjects_hlp
+	clear_variable = subjects123
 }
