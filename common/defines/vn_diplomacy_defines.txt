@@ -17,6 +17,47 @@
 		AGREEMENT_PRESET_VASSAL						= "preset_vassal"				# The standard Vassal preset
 		AGREEMENT_INTEGRATION_TERM					= "subject_integration"			# The agreement term for integration
 		AGREEMENT_CAN_INTEGRATE_TERM_VALUE			= "subject_can_be_integrated"	# The agreement term value for allowing integration
+		
+		INTEGRATE_SUBJECT_MIN_DAYS				= 3600 # Amount of days the subject has been a subject before we can integrate it
+		SUBJECTS_INTEGRATION_CAP				= 1 # Amount of integrations you're allowed to have at the same time
+		SUBJECT_INTEGRATION_BASE_PROGRESS		= 5 # Cost per month for subject integration
+		SUBJECT_INTEGRATION_COST_BASE			= 50 # Base cost for integration
+		SUBJECT_INTEGRATION_COST_PER_POP		= 1 # Integration cost per pop
+		SUBJECT_INTEGRATION_COST_PER_PLANET		= 10 # Integration cost per planet
+
+		# These are used to determine the initial subject loyalty based on relation and relative military power
+		SUBJECT_LOYALTY_RELATION_FACTOR = 50		# Multiplied with relation (0-4) for initial loyalty
+		SUBJECT_LOYALTY_RELATION_SUBTRACT = 150		# Subtracted to balance out the relation loyalty weight
+		SUBJECT_LOYALTY_RELATIVE_POWER_FACTOR = 25		# Multiplied with relative military power (0-4) for initial loyalty
+		SUBJECT_LOYALTY_RELATIVE_POWER_SUBTRACT = 75		# Subtracted to balance out the relative military power loyalty weight
+
+		SUBJECT_MONTHLY_LOYALTY_INTEGRATION = -5			# Each month the subject is being integrated, its loyalty is modified by this amount
+		SUBJECT_MONTHLY_LOYALTY_OPINION_MULTIPLIER = 0.0025 # 0.01	# Each month, the subject's opinion of its overlord is multiplied by this amount & added to its loyalty
+
+		SUBJECT_LOYALTY_MAX = 100					# Max value of loyalty
+		SUBJECT_LOYALTY_MIN = -100					# Min value of loyalty
+
+		SUBJECT_XP_LOYALTY_MULTIPLIER = 0.05 #0.1			# The subject specialist XP will increase by this multiplied with Loyalty every month
+
+		# SUBJECT_TYPE_CONVERSION_MATCHES_PREFERRED_ETHIC_SPEED_FACTOR = 1.42					# How much faster/slower the specialization conversion will go if the subject has the type's preferred ethic
+		# SUBJECT_TYPE_CONVERSION_MATCHES_FANATIC_PREFERRED_ETHIC_SPEED_FACTOR = 2			# How much faster/slower the conversion will go if the subject has the fanatic variant of the type's preferred ethic
+		# SUBJECT_TYPE_CONVERSION_NO_PREFERRED_ETHIC_SPEED_FACTOR = 1							# How much faster/slower the conversion will go if the subject does not have the type's preferred ethic
+		# SUBJECT_TYPE_CONVERSION_OPPOSITE_ETHIC_SPEED_FACTOR = 0.67							# How much faster/slower the conversion will go if the subject has the opposite ethic to the type's preferred ethic
+		# SUBJECT_TYPE_CONVERSION_FANATIC_OPPOSITE_ETHIC_SPEED_FACTOR = 0.5					# How much faster/slower the conversion will go if the subject has the fanatic variant of the opposite ethic to the type's preferred ethic
+		# SUBJECT_TYPE_CONVERSION_SPRAWL_FACTOR = 5					# Conversion speed is affected by this÷EmpireSprawl
+
+		# AGREEMENT_RESOURCE_SUBSIDIES_MIN = -0.75				# Minimum percentage value for Resource Subsidies term
+		# AGREEMENT_RESOURCE_SUBSIDIES_MAX = -0.75				# Maximum percentage value for Resource Subsidies term
+		# AGREEMENT_RESOURCE_SUBSIDIES_INCREMENT = 0.05		# The increments between values for Resource Subsidies term
+
+		AGREEMENT_INTANGIBLE_TITHE_LINEAR_FACTOR = 5.0 #1.0					# For small tithes, each fraction of intangible (e.g. science) tithe yields this much (negative) impact
+		AGREEMENT_INTANGIBLE_TITHE_LARGE = 0.5							# A "large" tithe, for which impact reaches the below value
+		AGREEMENT_INTANGIBLE_TITHE_LARGE_VALUE	= 5.0					# (Negative) impact reached for the above "large" tithe
+		# AGREEMENT_INTANGIBLE_SUBSIDY_LINEAR_FACTOR = 0.5				# For small subsidies, each fraction of intangible (e.g. science) subsidy yields this much impact
+		# AGREEMENT_INTANGIBLE_SUBSIDY_LARGE = 0.5						# A "large" subsidy, for which impact reaches the below value
+		# AGREEMENT_INTANGIBLE_SUBSIDY_LARGE_VALUE = 0.5					# Impact reached for the above "large" subsidy
+		# AGREEMENT_INTANGIBLE_IMPACT_LOYALTY_WEIGHT = 100				# Translates change in intangible impact into loyalty change
+		# AGREEMENT_ECONOMIC_IMPACT_LOYALTY_WEIGHT = 100					# Translates change in economic impact (roughly -1 - +1) into loyalty change
 	}
 
 	NAI = {
@@ -88,7 +129,7 @@
 		# COMMERCIAL_PACT_ACCEPTANCE_TAKEN_VALUE_MIN = 0
 		# COMMERCIAL_PACT_ACCEPTANCE_TAKEN_VALUE_MAX = 200
 
-		MONTHLY_TRUST_SUBJECT = 0.2
+		MONTHLY_TRUST_SUBJECT = 0.1
 		
 		
 		VASSALIZATION_ACCEPTANCE_PROTECTORATE_MULT = 0.1		# multiplied by number of techs potential overlord is ahead in
