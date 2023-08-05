@@ -15,6 +15,7 @@ subject_loyalty_effects = {
 			}
 		}
 		target = {
+			vn_add_stat = yes
 			add_ethics_compatibility_modifier = yes
 			every_spynetwork = {
 				limit = {
