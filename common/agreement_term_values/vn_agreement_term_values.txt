@@ -5,6 +5,7 @@ subject_loyalty_effects = {
 		target = { save_event_target_as = new_subject }
 		owner = {
 			refresh_subject_count_loyalty_penalty = yes
+			vn_count_subject = yes
 			vn_add_empire_size_penalty = yes
 			every_spynetwork = {
 				limit = {

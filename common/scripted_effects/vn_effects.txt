@@ -49,11 +49,24 @@ vn_add_empire_size_penalty = {
 	set_variable = { which = subject_weight value = 0  }
 	every_subject = { 
 		  prev = {
-			      change_variable = { which = subject_weight value = 0.25 }
+			  
+				  if = {
+			                limit = { NOR = { 
+								               agreement_preset = preset_tributary
+								               agreement_preset = preset_subsidiary
+									  }
+						    }
+			                change_variable = { which = subject_weight value = 0.25 }
+			                
+			                else = {
+						      change_variable = { which = subject_weight value = 0.1 }   
+						   }
+					   }
 			  }
 	}
     
 	log = "!!!!!!!!!! Vassal Weight: \\[This.subject_weight]" 
+	log = "!!!!!!!!!! Vassal Name: \\[Root.target.GetName]"
 	
 	add_modifier = {
 	              modifier = vn_empire_size_mods
@@ -62,10 +75,46 @@ vn_add_empire_size_penalty = {
 	
 	#log = "!!!!!!!!!!!!!!! Name: [Root.target.GetName]."
 	clear_variable = subject_weight
+
+}
+
+vn_count_subject = {
+     
+    set_variable = { which = my_test_var value = trigger:subjects }
+	log = "!!!!!!!!!!!!!!! test Internal subjects: \\[This.my_test_var]."
+	if = {
+		limit = {
+			      NOT = { ROOT.owner = { is_variable_set = my_overlord_weight } }
+			    }
 	
+	          ROOT.owner = {
+	              set_variable = { which = my_overlord_weight value = 0  }
+	          
+	          }
+	}
+	else = {
+		     ROOT.owner = {
+				        # This code gets executed twice because reasons ... so let's do a prog(r)amer move
+				        if = { limit = { check_variable = { which = my_overlord_weight value < PREV.my_test_var } }
+							   change_variable = { which = my_overlord_weight value = 1 }
+		                }
+			}
+	}
 	
+	log = "!!!!!!!!!!!!!!! test Internal object: \\[ROOT.owner.my_overlord_weight]."
+	log = "!!!!!!!!!!!!!!! test Internal object owner: \\[ROOT.owner.GetName]."
+	clear_variable = my_test_var
 }
 
 vn_add_stat = {
-  	log = "!!!!!!!!!!!!!!! Subject Name: [This.owner.GetName]."
+  	log = "!!!!!!!!!!!!!!! Subject Name: \\[This.owner.GetName]."
+  	
+   	ROOT = {
+		set_variable = { which = my_test_var value = 0  }
+	if = { limit = { agreement_preset = preset_subsidiary }
+	      change_variable = { which = my_test_var value = 1 }   
+		}
+	log = "!!!!!!!!!!!!!!! Is Subsidiary: \\[This.my_test_var]."
+	}
+	
 }
