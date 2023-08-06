@@ -42,28 +42,28 @@ refresh_subject_count_loyalty_penalty = {
 }
 
 vn_add_empire_size_penalty = {
-	set_variable = { which = my_empire_size value = 0 }
-	set_variable = { which = my_empire_size2 value = 0 }
-	export_modifier_to_variable = { modifier = empire_size_pops_mult variable = my_empire_size }
+	
+	erase_modifier = { MOD = vn_empire_size_mods }
+    set_variable = { which = subject_weight value = 0 }
+	
+	set_variable = { which = subject_weight value = 0  }
+	every_subject = { 
+		  prev = {
+			      change_variable = { which = subject_weight value = 0.25 }
+			  }
+	}
     
-    erase_modifier = { MOD = vn_empire_size_mods }
-    
-    export_modifier_to_variable = { modifier = empire_size_pops_mult variable = my_empire_size2 }
-    subtract_variable = { which = my_empire_size2 value = my_empire_size }
-    
-	set_variable = { which = nr_subjects1 value = trigger:subjects }
-	multiply_variable = { which = nr_subjects1 value = 0.25 }
+	log = "!!!!!!!!!! Vassal Weight: \\[This.subject_weight]" 
+	
 	add_modifier = {
 	              modifier = vn_empire_size_mods
-	              multiplier = nr_subjects1
+	              multiplier = subject_weight
 	           }
-	clear_variable = nr_subjects1
 	
-	
-	change_variable = { which = my_test_var value = 1}
-	log = "!!!!!!!!!!!!!!!! Test Var: [This.my_empire_size]."
 	#log = "!!!!!!!!!!!!!!! Name: [Root.target.GetName]."
-	clear_variable = my_empire_size
+	clear_variable = subject_weight
+	
+	
 }
 
 vn_add_stat = {
