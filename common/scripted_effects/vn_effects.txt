@@ -84,25 +84,73 @@ vn_count_subject = {
 	log = "!!!!!!!!!!!!!!! test Internal subjects: \\[This.my_test_var]."
 	if = {
 		limit = {
-			      NOT = { ROOT.owner = { is_variable_set = my_overlord_weight } }
+			      NOT = { ROOT.owner = { is_variable_set = my_subject_counter } }
 			    }
 	
 	          ROOT.owner = {
-	              set_variable = { which = my_overlord_weight value = 0  }
+	              set_variable = { which = my_subject_counter value = 0  }
+	              set_variable = { which = my_tributary_counter value = 0  }
+	              set_variable = { which = my_subsidiary_counter value = 0  }
 	          
 	          }
 	}
 	else = {
 		     ROOT.owner = {
 				        # This code gets executed twice because reasons ... so let's do a prog(r)amer move
-				        if = { limit = { check_variable = { which = my_overlord_weight value < PREV.my_test_var } }
-							   change_variable = { which = my_overlord_weight value = 1 }
+				        if = { limit = { check_variable = { which = my_subject_counter value < PREV.my_test_var } }
+							   change_variable = { which = my_subject_counter value = 1 }
+							   if = { limit = { prev.ROOT.target = { agreement_preset = preset_subsidiary } }
+				                      change_variable = { which = my_subsidiary_counter value = 1 }
+				                    }
+							   else_if = { limit = { prev.ROOT.target = { agreement_preset = preset_tributary }}
+				                      change_variable = { which = my_tributary_counter value = 1 }
+					  
+					           }
+							   
 		                }
 			}
 	}
 	
-	log = "!!!!!!!!!!!!!!! test Internal object: \\[ROOT.owner.my_overlord_weight]."
-	log = "!!!!!!!!!!!!!!! test Internal object owner: \\[ROOT.owner.GetName]."
+	log = "!!!!!!!!!!!!!!! test Internal object (add): \\[ROOT.owner.my_subject_counter]."
+	log = "!!!!!!!!!!!!!!! test Internal object owner (add): \\[ROOT.owner.GetName]."
+	log = "!!!!!!!!!!!!!!! test Subsidiary counter (add): \\[ROOT.owner.my_subsidiary_counter]."
+	log = "!!!!!!!!!!!!!!! test Tributary counter (add): \\[ROOT.owner.my_tributary_counter]."
+	clear_variable = my_test_var
+}
+
+vn_remove_subject = {
+     
+    set_variable = { which = my_test_var value = trigger:subjects }
+	log = "!!!!!!!!!!!!!!! test Internal subjects: \\[This.my_test_var]."
+	if = {
+		limit = {
+			       ROOT.owner = { is_variable_set = my_subject_counter } 
+			    }
+	
+	          ROOT.owner = {
+				        if = { limit = { check_variable = { which = my_subject_counter value > 0 } }
+							   subtract_variable = { which = my_subject_counter value = 1 }
+							     if = { limit = { ROOT.target = {agreement_preset = preset_subsidiary }}
+				                      subtract_variable = { which = my_subsidiary_counter value = 1 }
+				                    }
+									else_if = { limit = { ROOT.target = {agreement_preset = preset_tributary }}
+				                                 subtract_variable = { which = my_tributary_counter value = 1 }
+											  }
+							}
+						}
+			}
+						
+	else = {
+	           clear_variable = my_subject_counter
+	           clear_variable = my_tributary_counter
+	           clear_variable = my_subsidiary_counter
+	       }
+	
+	
+	log = "!!!!!!!!!!!!!!! test Internal object (sub): \\[ROOT.owner.my_subject_counter]."
+	log = "!!!!!!!!!!!!!!! test Internal object owner (sub): \\[ROOT.owner.GetName]."
+	log = "!!!!!!!!!!!!!!! test Subsidiary counter (sub): \\[ROOT.owner.my_subsidiary_counter]."
+	log = "!!!!!!!!!!!!!!! test Tributary counter (sub): \\[ROOT.owner.my_tributary_counter]."
 	clear_variable = my_test_var
 }
 
