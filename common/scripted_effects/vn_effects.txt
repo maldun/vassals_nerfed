@@ -95,19 +95,52 @@ vn_count_subject = {
 	          }
 	}
 	else = {
-		     ROOT.owner = {
+		     ROOT = {
 				        # This code gets executed twice because reasons ... so let's do a prog(r)amer move
-				        if = { limit = { check_variable = { which = my_subject_counter value < PREV.my_test_var } }
-							   change_variable = { which = my_subject_counter value = 1 }
-							   if = { limit = { prev.ROOT.target = { agreement_preset = preset_subsidiary } }
-				                      change_variable = { which = my_subsidiary_counter value = 1 }
+				        if = { limit = { owner = { check_variable = { which = my_subject_counter value < PREVPREV.my_test_var } }}
+							   owner = {change_variable = { which = my_subject_counter value = 1 } }
+							   
+							   if = { limit = {  agreement_preset = preset_subsidiary  }
+				                      owner = { change_variable = { which = my_subsidiary_counter value = 1 } }
+									  target = { set_country_flag = my_subsidiary_check }
 				                    }
-							   else_if = { limit = { prev.ROOT.target = { agreement_preset = preset_tributary }}
-				                      change_variable = { which = my_tributary_counter value = 1 }
-					  
+							   else_if = { limit = {  agreement_preset = preset_tributary }
+				                      owner = { change_variable = { which = my_tributary_counter value = 1 } }
+				                      target = { set_country_flag = my_tributary_check }
 					           }
 							   
 		                }
+						else_if = { limit = { owner = { check_variable = { which = my_subject_counter value = PREVPREV.my_test_var } } }
+				              if = { limit = { AND = {  agreement_preset = preset_subsidiary  
+										                target = { NOT = { has_country_flag = my_subsidiary_check } }
+													  }
+									       }
+									       owner = { change_variable = { which = my_subsidiary_counter value = 1 } }
+									       target = { set_country_flag = my_subsidiary_check }
+						              
+				                    }
+							   else_if = { limit = { AND = {  NOT = { agreement_preset = preset_subsidiary  }
+										                  target = {  has_country_flag = my_subsidiary_check }
+													  }
+									               }
+							               owner = { subtract_variable = { which = my_subsidiary_counter value = 1 } }
+									       target = { remove_country_flag = my_subsidiary_check }
+					           }
+							   else_if = { limit = { AND = {  agreement_preset = preset_tributary  
+										                target = { NOT = { has_country_flag = my_tributary_check } }
+													  }
+									       }
+				                      owner = { change_variable = { which = my_tributary_counter value = 1 } }
+									  target = { set_country_flag = my_tributary_check }
+					           }
+							   else_if = { limit = { AND = {  NOT = { agreement_preset = preset_tributary  }
+										                  target = {  has_country_flag = my_tributary_check }
+													  }
+									               }
+							               owner = { subtract_variable = { which = my_tributary_counter value = 1 } }
+									       target = { remove_country_flag = my_tributary_check }
+					           }
+				        }
 			}
 	}
 	
@@ -127,23 +160,32 @@ vn_remove_subject = {
 			       ROOT.owner = { is_variable_set = my_subject_counter } 
 			    }
 	
-	          ROOT.owner = {
-				        if = { limit = { check_variable = { which = my_subject_counter value > 0 } }
-							   subtract_variable = { which = my_subject_counter value = 1 }
-							     if = { limit = { ROOT.target = {agreement_preset = preset_subsidiary }}
-				                      subtract_variable = { which = my_subsidiary_counter value = 1 }
+                   ROOT = {
+				        if = { limit = { owner = { check_variable = { which = my_subject_counter value > 0 } }}
+							   owner = { subtract_variable = { which = my_subject_counter value = 1 } }
+							   if = { limit = {  agreement_preset = preset_subsidiary  }
+				                      owner = { subtract_variable = { which = my_subsidiary_counter value = 1 } }
+				                      if = { limit = { target = { has_country_flag = my_subsidiary_check} } 
+								             target = { remove_country_flag = my_subsidiary_check}
+								           }
 				                    }
-									else_if = { limit = { ROOT.target = {agreement_preset = preset_tributary }}
-				                                 subtract_variable = { which = my_tributary_counter value = 1 }
-											  }
-							}
-						}
+							   else_if = { limit = {  agreement_preset = preset_tributary }
+				                      owner = { subtract_variable = { which = my_tributary_counter value = 1 } }
+				                      if = { limit = { target = { has_country_flag = my_tributary_check} } 
+								             target = { remove_country_flag = my_tributary_check}
+								           }
+					           }
+							   
+		                }
+			        }
 			}
 						
 	else = {
+		     ROOT.owner = {
 	           clear_variable = my_subject_counter
 	           clear_variable = my_tributary_counter
 	           clear_variable = my_subsidiary_counter
+	           }
 	       }
 	
 	
