@@ -62,8 +62,8 @@ vn_add_empire_size_penalty = {
 	           clear_variable = tribut_hlp
 	           
 	     }    
-	log = "!!!!!!!!!! Vassal Weight: \\[This.subject_weight]" 
-	log = "!!!!!!!!!! Vassal Name: \\[Root.target.GetName]"
+	log = "!!! Vassals Nerfed Debug: Vassal Weight: \\[This.subject_weight]" 
+	log = "!!! Vassals Nerfed Debug: Vassal Name: \\[Root.target.GetName]"
 	
 	add_modifier = {
 	              modifier = vn_empire_size_mods
@@ -150,7 +150,6 @@ vn_count_subject = {
 vn_remove_subject = {
      
     set_variable = { which = my_test_var value = trigger:subjects }
-	log = "!!!!!!!!!!!!!!! test Internal subjects: \\[This.my_test_var]."
 	if = {
 		limit = {
 			       ROOT.owner = { is_variable_set = my_subject_counter } 
