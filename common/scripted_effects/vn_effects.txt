@@ -44,27 +44,24 @@ refresh_subject_count_loyalty_penalty = {
 vn_add_empire_size_penalty = {
 	
 	erase_modifier = { MOD = vn_empire_size_mods }
-    set_variable = { which = subject_weight value = 0 }
-	
-	set_variable = { which = subject_weight value = 0  }
-	every_subject = { 
-		  prev = {
-			  
-				  if = {
-			                limit = { NOR = { 
-								               agreement_preset = preset_tributary
-								               agreement_preset = preset_subsidiary
-									  }
-						    }
-			                change_variable = { which = subject_weight value = 0.25 }
-			                
-			                else = {
-						      change_variable = { which = subject_weight value = 0.1 }   
-						   }
-					   }
-			  }
-	}
+    set_variable = { which = subject_weight value = 0}
     
+	if = { limit = { ROOT.owner = { is_variable_set = my_subject_counter } }
+	           change_variable  = { which = subject_weight value =  ROOT.owner.my_subject_counter }
+	           subtract_variable  = { which = subject_weight value =  ROOT.owner.my_subsidiary_counter }
+	           subtract_variable  = { which = subject_weight value =  ROOT.owner.my_tributary_counter }
+	           multiply_variable = { which = subject_weight value = 0.25 }
+	           
+	           set_variable = { which = subsid_hlp value = ROOT.owner.my_subsidiary_counter }
+	           multiply_variable = { which = subsid_hlp value = 0.1 }
+	           change_variable = { which = subject_weight value = subsid_hlp }
+	           clear_variable = subsid_hlp
+	           set_variable = { which = tribut_hlp value = ROOT.owner.my_tributary_counter }
+	           multiply_variable = { which = tribut_hlp value = 0.2 }
+	           change_variable = { which = subject_weight value = tribut_hlp }
+	           clear_variable = tribut_hlp
+	           
+	     }    
 	log = "!!!!!!!!!! Vassal Weight: \\[This.subject_weight]" 
 	log = "!!!!!!!!!! Vassal Name: \\[Root.target.GetName]"
 	
@@ -81,7 +78,6 @@ vn_add_empire_size_penalty = {
 vn_count_subject = {
      
     set_variable = { which = my_test_var value = trigger:subjects }
-	log = "!!!!!!!!!!!!!!! test Internal subjects: \\[This.my_test_var]."
 	if = {
 		limit = {
 			      NOT = { ROOT.owner = { is_variable_set = my_subject_counter } }
@@ -144,10 +140,10 @@ vn_count_subject = {
 			}
 	}
 	
-	log = "!!!!!!!!!!!!!!! test Internal object (add): \\[ROOT.owner.my_subject_counter]."
-	log = "!!!!!!!!!!!!!!! test Internal object owner (add): \\[ROOT.owner.GetName]."
-	log = "!!!!!!!!!!!!!!! test Subsidiary counter (add): \\[ROOT.owner.my_subsidiary_counter]."
-	log = "!!!!!!!!!!!!!!! test Tributary counter (add): \\[ROOT.owner.my_tributary_counter]."
+	#log = "!!!!!!!!!!!!!!! test Internal object (add): \\[ROOT.owner.my_subject_counter]."
+	#log = "!!!!!!!!!!!!!!! test Internal object owner (add): \\[ROOT.owner.GetName]."
+	#log = "!!!!!!!!!!!!!!! test Subsidiary counter (add): \\[ROOT.owner.my_subsidiary_counter]."
+	#log = "!!!!!!!!!!!!!!! test Tributary counter (add): \\[ROOT.owner.my_tributary_counter]."
 	clear_variable = my_test_var
 }
 
@@ -189,22 +185,22 @@ vn_remove_subject = {
 	       }
 	
 	
-	log = "!!!!!!!!!!!!!!! test Internal object (sub): \\[ROOT.owner.my_subject_counter]."
-	log = "!!!!!!!!!!!!!!! test Internal object owner (sub): \\[ROOT.owner.GetName]."
-	log = "!!!!!!!!!!!!!!! test Subsidiary counter (sub): \\[ROOT.owner.my_subsidiary_counter]."
-	log = "!!!!!!!!!!!!!!! test Tributary counter (sub): \\[ROOT.owner.my_tributary_counter]."
+	#log = "!!!!!!!!!!!!!!! test Internal object (sub): \\[ROOT.owner.my_subject_counter]."
+	#log = "!!!!!!!!!!!!!!! test Internal object owner (sub): \\[ROOT.owner.GetName]."
+	#log = "!!!!!!!!!!!!!!! test Subsidiary counter (sub): \\[ROOT.owner.my_subsidiary_counter]."
+	#log = "!!!!!!!!!!!!!!! test Tributary counter (sub): \\[ROOT.owner.my_tributary_counter]."
 	clear_variable = my_test_var
 }
 
-vn_add_stat = {
-  	log = "!!!!!!!!!!!!!!! Subject Name: \\[This.owner.GetName]."
-  	
-   	ROOT = {
-		set_variable = { which = my_test_var value = 0  }
-	if = { limit = { agreement_preset = preset_subsidiary }
-	      change_variable = { which = my_test_var value = 1 }   
-		}
-	log = "!!!!!!!!!!!!!!! Is Subsidiary: \\[This.my_test_var]."
-	}
-	
-}
+# vn_add_stat = {
+#   	log = "!!!!!!!!!!!!!!! Subject Name: \\[This.owner.GetName]."
+#   	
+#    	ROOT = {
+# 		set_variable = { which = my_test_var value = 0  }
+# 	if = { limit = { agreement_preset = preset_subsidiary }
+# 	      change_variable = { which = my_test_var value = 1 }   
+# 		}
+# 	log = "!!!!!!!!!!!!!!! Is Subsidiary: \\[This.my_test_var]."
+# 	}
+# 	
+# }
