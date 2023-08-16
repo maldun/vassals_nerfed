@@ -57,7 +57,7 @@ vn_add_empire_size_penalty = {
 	           change_variable = { which = subject_weight value = subsid_hlp }
 	           clear_variable = subsid_hlp
 	           set_variable = { which = tribut_hlp value = ROOT.owner.my_tributary_counter }
-	           multiply_variable = { which = tribut_hlp value = 0.2 }
+	           multiply_variable = { which = tribut_hlp value = 0.15 }
 	           change_variable = { which = subject_weight value = tribut_hlp }
 	           clear_variable = tribut_hlp
 	           
