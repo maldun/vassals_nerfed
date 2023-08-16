@@ -39,12 +39,167 @@ refresh_subject_count_loyalty_penalty = {
 	       clear_variable = diff1
 	     }
 	}
+}
+
+vn_add_empire_size_penalty = {
+	
 	erase_modifier = { MOD = vn_empire_size_mods }
-	set_variable = { which = subjects123 value = trigger:subjects }
-	multiply_variable = { which = subjects123 value = 0.25 }
+    set_variable = { which = subject_weight value = 0}
+    
+	if = { limit = { ROOT.owner = { is_variable_set = my_subject_counter } }
+	           change_variable  = { which = subject_weight value =  ROOT.owner.my_subject_counter }
+	           subtract_variable  = { which = subject_weight value =  ROOT.owner.my_subsidiary_counter }
+	           subtract_variable  = { which = subject_weight value =  ROOT.owner.my_tributary_counter }
+	           multiply_variable = { which = subject_weight value = 0.25 }
+	           
+	           set_variable = { which = subsid_hlp value = ROOT.owner.my_subsidiary_counter }
+	           multiply_variable = { which = subsid_hlp value = 0.1 }
+	           change_variable = { which = subject_weight value = subsid_hlp }
+	           clear_variable = subsid_hlp
+	           set_variable = { which = tribut_hlp value = ROOT.owner.my_tributary_counter }
+	           multiply_variable = { which = tribut_hlp value = 0.2 }
+	           change_variable = { which = subject_weight value = tribut_hlp }
+	           clear_variable = tribut_hlp
+	           
+	     }    
+	log = "!!! Vassals Nerfed Debug: Vassal Weight: \\[This.subject_weight]" 
+	log = "!!! Vassals Nerfed Debug: Vassal Name: \\[Root.target.GetName]"
+	
 	add_modifier = {
 	              modifier = vn_empire_size_mods
-	              multiplier = subjects123
+	              multiplier = subject_weight
 	           }
-	clear_variable = subjects123
+	
+	#log = "!!!!!!!!!!!!!!! Name: [Root.target.GetName]."
+	clear_variable = subject_weight
+
 }
+
+vn_count_subject = {
+     
+    set_variable = { which = my_test_var value = trigger:subjects }
+	if = {
+		limit = {
+			      NOT = { ROOT.owner = { is_variable_set = my_subject_counter } }
+			    }
+	
+	          ROOT.owner = {
+	              set_variable = { which = my_subject_counter value = 0  }
+	              set_variable = { which = my_tributary_counter value = 0  }
+	              set_variable = { which = my_subsidiary_counter value = 0  }
+	          
+	          }
+	}
+	else = {
+		     ROOT = {
+				        # This code gets executed twice because reasons ... so let's do a prog(r)amer move
+				        if = { limit = { owner = { check_variable = { which = my_subject_counter value < PREVPREV.my_test_var } }}
+							   owner = {change_variable = { which = my_subject_counter value = 1 } }
+							   
+							   if = { limit = {  agreement_preset = preset_subsidiary  }
+				                      owner = { change_variable = { which = my_subsidiary_counter value = 1 } }
+									  target = { set_country_flag = my_subsidiary_check }
+				                    }
+							   else_if = { limit = {  agreement_preset = preset_tributary }
+				                      owner = { change_variable = { which = my_tributary_counter value = 1 } }
+				                      target = { set_country_flag = my_tributary_check }
+					           }
+							   
+		                }
+						else_if = { limit = { owner = { check_variable = { which = my_subject_counter value = PREVPREV.my_test_var } } }
+				              if = { limit = { AND = {  agreement_preset = preset_subsidiary  
+										                target = { NOT = { has_country_flag = my_subsidiary_check } }
+													  }
+									       }
+									       owner = { change_variable = { which = my_subsidiary_counter value = 1 } }
+									       target = { set_country_flag = my_subsidiary_check }
+						              
+				                    }
+							   else_if = { limit = { AND = {  NOT = { agreement_preset = preset_subsidiary  }
+										                  target = {  has_country_flag = my_subsidiary_check }
+													  }
+									               }
+							               owner = { subtract_variable = { which = my_subsidiary_counter value = 1 } }
+									       target = { remove_country_flag = my_subsidiary_check }
+					           }
+							   else_if = { limit = { AND = {  agreement_preset = preset_tributary  
+										                target = { NOT = { has_country_flag = my_tributary_check } }
+													  }
+									       }
+				                      owner = { change_variable = { which = my_tributary_counter value = 1 } }
+									  target = { set_country_flag = my_tributary_check }
+					           }
+							   else_if = { limit = { AND = {  NOT = { agreement_preset = preset_tributary  }
+										                  target = {  has_country_flag = my_tributary_check }
+													  }
+									               }
+							               owner = { subtract_variable = { which = my_tributary_counter value = 1 } }
+									       target = { remove_country_flag = my_tributary_check }
+					           }
+				        }
+			}
+	}
+	
+	#log = "!!!!!!!!!!!!!!! test Internal object (add): \\[ROOT.owner.my_subject_counter]."
+	#log = "!!!!!!!!!!!!!!! test Internal object owner (add): \\[ROOT.owner.GetName]."
+	#log = "!!!!!!!!!!!!!!! test Subsidiary counter (add): \\[ROOT.owner.my_subsidiary_counter]."
+	#log = "!!!!!!!!!!!!!!! test Tributary counter (add): \\[ROOT.owner.my_tributary_counter]."
+	clear_variable = my_test_var
+}
+
+vn_remove_subject = {
+     
+    set_variable = { which = my_test_var value = trigger:subjects }
+	if = {
+		limit = {
+			       ROOT.owner = { is_variable_set = my_subject_counter } 
+			    }
+	
+                   ROOT = {
+				        if = { limit = { owner = { check_variable = { which = my_subject_counter value > 0 } }}
+							   owner = { subtract_variable = { which = my_subject_counter value = 1 } }
+							   if = { limit = {  agreement_preset = preset_subsidiary  }
+				                      owner = { subtract_variable = { which = my_subsidiary_counter value = 1 } }
+				                      if = { limit = { target = { has_country_flag = my_subsidiary_check} } 
+								             target = { remove_country_flag = my_subsidiary_check}
+								           }
+				                    }
+							   else_if = { limit = {  agreement_preset = preset_tributary }
+				                      owner = { subtract_variable = { which = my_tributary_counter value = 1 } }
+				                      if = { limit = { target = { has_country_flag = my_tributary_check} } 
+								             target = { remove_country_flag = my_tributary_check}
+								           }
+					           }
+							   
+		                }
+			        }
+			}
+						
+	else = {
+		     ROOT.owner = {
+	           clear_variable = my_subject_counter
+	           clear_variable = my_tributary_counter
+	           clear_variable = my_subsidiary_counter
+	           }
+	       }
+	
+	
+	#log = "!!!!!!!!!!!!!!! test Internal object (sub): \\[ROOT.owner.my_subject_counter]."
+	#log = "!!!!!!!!!!!!!!! test Internal object owner (sub): \\[ROOT.owner.GetName]."
+	#log = "!!!!!!!!!!!!!!! test Subsidiary counter (sub): \\[ROOT.owner.my_subsidiary_counter]."
+	#log = "!!!!!!!!!!!!!!! test Tributary counter (sub): \\[ROOT.owner.my_tributary_counter]."
+	clear_variable = my_test_var
+}
+
+# vn_add_stat = {
+#   	log = "!!!!!!!!!!!!!!! Subject Name: \\[This.owner.GetName]."
+#   	
+#    	ROOT = {
+# 		set_variable = { which = my_test_var value = 0  }
+# 	if = { limit = { agreement_preset = preset_subsidiary }
+# 	      change_variable = { which = my_test_var value = 1 }   
+# 		}
+# 	log = "!!!!!!!!!!!!!!! Is Subsidiary: \\[This.my_test_var]."
+# 	}
+# 	
+# }
